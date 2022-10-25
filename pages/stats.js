@@ -1,17 +1,16 @@
 async function getDatos() {
   try {
-    let res = await fetch("https://mind-hub.up.railway.app/amazing");
+    let res = await fetch("https://mh-amazing.herokuapp.com/amazing");
     let data = await res.json();
     let events = data.events;
     // console.log(events);
     // EVENTOS PASADOS
     let pastEvents = events.filter((event) => data.date > event.date);
     // console.log(pastEvents);
-    // filtro categorias de eventos pasados y las ordeno por orden alfabetico
+    // filtro categorias de eventos pasados
     let categoriesEventsPast = pastEvents.map((event) => event.category);
     let categoriesEventsFilterPast = [...new Set(categoriesEventsPast)];
-    let categoriesFilterPastSort = [...categoriesEventsFilterPast].sort();
-    // console.log(categoriesFilterPastSort);
+
     // console.log(categoriesEventsFilterPast);
     // recorro el array de eventos pasados con map y le agrego dos nuevas propiedades a cada evento, percentage y gananciaReal.
     pastEvents.map((everyEvent) => {
@@ -24,15 +23,16 @@ async function getDatos() {
     });
 
     // MAP + FILTER para obtener un array con los eventos de cada categoria. Se utiliza el map porque tengo que transformar el array de categorias en un array con los eventos de CADA CATEGORIA
-    let arrayEventsPast = categoriesFilterPastSort
-      .map((cadaCategoria) => {
-        let arrayFiltradoPast = pastEvents.filter(
-          (cadaEvento) => cadaEvento.category === cadaCategoria
-        );
-        return reduceStatsPast(arrayFiltradoPast);
-      })
-      .forEach(tablePast);
-   
+    let arrayEventsPast = categoriesEventsFilterPast.map((cadaCategoria) => {
+      let arrayFiltradoPast = pastEvents.filter(
+        (cadaEvento) => cadaEvento.category === cadaCategoria
+      );
+      return reduceStatsPast(arrayFiltradoPast);
+    });
+    let ordenadoPorGananciaPast = [...arrayEventsPast].sort(
+      (evento1, evento2) => evento2.ganancia - evento1.ganancia
+    );
+    tablePast(ordenadoPorGananciaPast);
 
     function reduceStatsPast(array) {
       let elemento0 = {
@@ -83,15 +83,11 @@ async function getDatos() {
     let upcomingEvents = events.filter((event) => data.date < event.date);
     // console.log(upcomingEvents);
 
-    // filtro categorias de eventos futuros y las ordeno por orden alfabetico.
+    // filtro categorias de eventos futuros
     let categoriesEventsUpcoming = upcomingEvents.map(
       (event) => event.category
     );
     let categoriesEventsFilterUpcoming = [...new Set(categoriesEventsUpcoming)];
-    let categoriesFilterUpcomingSort = [
-      ...categoriesEventsFilterUpcoming,
-    ].sort();
-    // console.log(categoriesFilterUpcomingSort);
 
     // recorro el array de eventos futuros con map y le agrego dos nuevas propiedades a cada evento, percentage y ganancia estimada.
     upcomingEvents.map((everyEvent) => {
@@ -105,20 +101,19 @@ async function getDatos() {
 
     // MAP + FILTER para obtener un array con los eventos de cada categoria. Se utiliza el map porque tengo que transformar el array de categorias en un array con los eventos de CADA CATEGORIA
 
-    let arrayEventsUpcoming = categoriesFilterUpcomingSort
-      .map((cadaCategoria) => {
+    let arrayEventsUpcoming = categoriesEventsFilterUpcoming.map(
+      (cadaCategoria) => {
         let arrayFiltradoUpcoming = upcomingEvents.filter(
           (cadaEvento) => cadaEvento.category === cadaCategoria
         );
 
         return reduceStatsUpcoming(arrayFiltradoUpcoming);
-      })
-      let ordenadoPorGanancia = [...arrayEventsUpcoming].sort(
-        (evento1, evento2) => evento2.ganancia - evento1.ganancia
-      );
-      tableUpcoming(ordenadoPorGanancia)
-
-
+      }
+    );
+    let ordenadoPorGananciaUpcoming = [...arrayEventsUpcoming].sort(
+      (evento1, evento2) => evento2.ganancia - evento1.ganancia
+    );
+    tableUpcoming(ordenadoPorGananciaUpcoming);
 
     function reduceStatsUpcoming(array) {
       let elemento0 = {
@@ -161,22 +156,23 @@ function table1(maxP, minP, maxC) {
 }
 
 function tableUpcoming(array) {
-  array.forEach((event)=>{
+  array.forEach((event) => {
     let tableUpcoming2 = document.getElementById("tableUpcoming");
     tableUpcoming2.innerHTML += `<tr>
     <td>${event.category}</td>
      <td>US$ ${event.ganancia}</td>
     <td>${event.percentage}%</td>
      </tr>`;
-  })
- 
+  });
 }
 
 function tablePast(array) {
-  let tablePast2 = document.getElementById("tablePast");
-  tablePast2.innerHTML += `<tr>
-  <td>${array.category}</td>
-   <td>US$ ${array.ganancia}</td>
-  <td>${array.percentage}%</td>
-   </tr>`;
+  array.forEach((event) => {
+    let tablePast2 = document.getElementById("tablePast");
+    tablePast2.innerHTML += `<tr>
+    <td>${event.category}</td>
+     <td>US$ ${event.ganancia}</td>
+    <td>${event.percentage}%</td>
+     </tr>`;
+  });
 }
