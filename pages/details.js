@@ -3,10 +3,10 @@ let container18 = document.getElementById("container18");
 async function getDatos (){
   try {
    let id = location.search.slice(4);
-   let res = await fetch(`https://mind-hub.up.railway.app/amazing/${id}`)
+   let res = await fetch(`https://63bec0a6f5cfc0949b601cc9.mockapi.io/mindhub/amazing-events/${id}`)
    let data = await res.json()
    console.log(data);
-   let events = data.event
+   let events = data
    console.log(events);
    let date = data.date
   console.log(date);

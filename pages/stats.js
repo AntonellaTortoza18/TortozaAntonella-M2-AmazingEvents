@@ -1,11 +1,12 @@
 async function getDatos() {
   try {
-    let res = await fetch("https://mind-hub.up.railway.app/amazing");
+    let res = await fetch("https://63bec0a6f5cfc0949b601cc9.mockapi.io/mindhub/amazing-events");
     let data = await res.json();
-    let events = data.events;
+    let events = data;
     // console.log(events);
     // EVENTOS PASADOS
-    let pastEvents = events.filter((event) => data.date > event.date);
+    const currentDate = "2022-01-01"
+    let pastEvents = data.filter((event) => currentDate > event.date);
     // console.log(pastEvents);
     // filtro categorias de eventos pasados
     let categoriesEventsPast = pastEvents.map((event) => event.category);
@@ -66,7 +67,7 @@ async function getDatos() {
     let menorPorcentajeAsistencia = ordenadoPorAsistencia[0];
 
     // Creo la variable ordenadoPorCapacidad que va a recorrer el array de eventos pasados con sort y este va a ordenar de menor a mayor los eventos segun su capacidad.
-    let ordenadoPorCapacidad = [...pastEvents].sort(
+    let ordenadoPorCapacidad = [...data].sort(
       (evento1, evento2) => evento1.capacity - evento2.capacity
     );
     let mayorCapacidad = ordenadoPorCapacidad[ordenadoPorCapacidad.length - 1];
@@ -80,7 +81,7 @@ async function getDatos() {
     );
 
     // EVENTOS FUTUROS
-    let upcomingEvents = events.filter((event) => data.date < event.date);
+    let upcomingEvents = data.filter((event) => currentDate < event.date);
     // console.log(upcomingEvents);
 
     // filtro categorias de eventos futuros

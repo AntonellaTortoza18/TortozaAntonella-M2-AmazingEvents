@@ -2,9 +2,9 @@ getDatos();
 
 async function getDatos() {
   try {
-    let res = await fetch("https://mind-hub.up.railway.app/amazing");
+    let res = await fetch("https://63bec0a6f5cfc0949b601cc9.mockapi.io/mindhub/amazing-events");
     let data = await res.json();
-    let events = data.events;
+    let events = data;
 
     // createCards(events, "events");
     createCards(events)
@@ -60,7 +60,7 @@ function createCards(data) {
               ${events.description}
               </p>
               <p class="price">Price: US$${events.price}</p>
-              <a href="../pages/details.html?id=${events.id}"  class="btn btn-dark">Read More ></a>
+              <a href="../pages/details.html?id=${events._id}"  class="btn btn-dark">Read More ></a>
             </div>
             `;
       container18.appendChild(div);
