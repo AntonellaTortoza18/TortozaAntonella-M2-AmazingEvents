@@ -1,11 +1,10 @@
 async function getDatos (){
   try {
  
-   let res = await fetch("https://mind-hub.up.railway.app/amazing/?time=upcoming")
+   let res = await fetch("https://63bec0a6f5cfc0949b601cc9.mockapi.io/mindhub/amazing-events")
    let data = await res.json()
-   console.log(data);
-   let upcomingEvents = data.events
-   console.log(upcomingEvents);
+   const currentDate = "2022-01-01"
+   let upcomingEvents = data.filter((event) => currentDate < event.date);
    createCards(upcomingEvents) 
    createCheckBoxes(upcomingEvents)
   
@@ -56,7 +55,7 @@ function createCards(data) {
               ${events.description}
               </p>
               <p class="price">Price: US$${events.price}</p>
-              <a href="../pages/details.html?id=${events.id}" class="btn btn-dark">Read More ></a>
+              <a href="../pages/details.html?id=${events._id}" class="btn btn-dark">Read More ></a>
             </div>
             `;
       container18.appendChild(div);

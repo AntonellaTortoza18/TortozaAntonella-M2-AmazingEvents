@@ -1,10 +1,10 @@
 async function getDatos() {
   try {
-    let res = await fetch("https://mind-hub.up.railway.app/amazing/?time=past");
+    let res = await fetch("https://63bec0a6f5cfc0949b601cc9.mockapi.io/mindhub/amazing-events");
     let data = await res.json();
-    console.log(data);
-    let pastEvents = data.events;
-    console.log(pastEvents);
+    const currentDate = "2022-01-01"
+    let pastEvents = data.filter((event) => currentDate > event.date);
+   
     createCards(pastEvents);
     createCheckBoxes(pastEvents);
     const checkBoxes = document.querySelectorAll(".form-check-input");
@@ -51,7 +51,7 @@ function createCards(data) {
               ${events.description}
               </p>
               <p class="price">Price: US$${events.price}</p>
-              <a href="../pages/details.html?id=${events.id}"  class="btn btn-dark">Read More ></a>
+              <a href="../pages/details.html?id=${events._id}"  class="btn btn-dark">Read More ></a>
             </div>
             `;
       container18.appendChild(div);
